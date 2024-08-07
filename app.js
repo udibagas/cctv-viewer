@@ -1,29 +1,28 @@
 const express = require("express");
+const Camera = require("./models/camera");
 const app = express();
+const port = 2000;
 const { proxy, scriptUrl } = require("rtsp-relay")(app);
 
+app.set("view engine", "ejs");
+
 app.ws("/api/stream", (ws, req) => {
-  // const url = `rtsp://807e9439d5ca.entrypoint.cloud.wowza.com:1935/app-rC94792j/068b9c9a_stream2`;
-  // const { url } = req.query;
-  const url = `rtsp://admin:admin123@192.168.1.110/live.sdp`;
+  // const url = `rtsp://admin:admin123@192.168.1.110/live.sdp`;
   // const url = `rtsp://admin:admin123@192.168.1.110/live/0/main`;
+  const { url } = req.query;
   return proxy({ url })(ws);
 });
 
-app.get("/", (req, res) =>
-  res.send(`
-  <canvas id='canvas'></canvas>
+app.get("/", async (req, res) => {
+  try {
+    const cameras = await Camera.findAll();
+    res.render("index", { scriptUrl, cameras });
+  } catch (error) {
+    console.error(error);
+    res.status(5000).send(error.message);
+  }
+});
 
-  <script src='${scriptUrl}'></script>
-  <script>
-    loadPlayer({
-      url: 'ws://localhost:2000/api/stream',
-      canvas: document.getElementById('canvas')
-    });
-  </script>
-`)
-);
-
-app.listen(2000, () => {
-  console.log(`Streaming relay running on port 2000`);
+app.listen(port, () => {
+  console.log(`Streaming relay running on port ${port}`);
 });

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CCTV Viewer</title>
+
+    <style>
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      canvas {
+        border: 1px solid #ddd;
+        width: 480px;
+        height: 270px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <% cameras.forEach(c => { %>
+      <canvas id="canvas<%= c.id %>"></canvas>
+      <% }) %>
+    </div>
+
+    <script src="<%= scriptUrl %>"></script>
+
+    <% cameras.forEach(c => { %>
+    <script>
+      loadPlayer({
+        url: `ws://localhost:2000/api/stream?url=<%= c.streaming_url %>`,
+        canvas: document.getElementById("<%= c.id %>"),
+      });
+    </script>
+    <% }) %>
+  </body>
+</html>

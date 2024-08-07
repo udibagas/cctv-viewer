@@ -34,7 +34,7 @@
     <script>
       loadPlayer({
         url: `ws://localhost:2000/api/stream?url=<%= c.streaming_url %>`,
-        canvas: document.getElementById("<%= c.id %>"),
+        canvas: document.getElementById("canvas<%= c.id %>"),
       });
     </script>
     <% }) %>

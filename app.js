@@ -3,8 +3,10 @@ const app = express();
 const { proxy, scriptUrl } = require("rtsp-relay")(app);
 
 app.ws("/api/stream", (ws, req) => {
-  const url = `rtsp://807e9439d5ca.entrypoint.cloud.wowza.com:1935/app-rC94792j/068b9c9a_stream2`;
+  // const url = `rtsp://807e9439d5ca.entrypoint.cloud.wowza.com:1935/app-rC94792j/068b9c9a_stream2`;
   // const { url } = req.query;
+  const url = `rtsp://admin:admin123@192.168.1.110/live.sdp`;
+  // const url = `rtsp://admin:admin123@192.168.1.110/live/0/main`;
   return proxy({ url })(ws);
 });
 

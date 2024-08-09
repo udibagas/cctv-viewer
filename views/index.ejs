@@ -34,7 +34,7 @@
       (async () => {
         const res = await fetch("/api/camera");
         if (res.statusText !== "OK") return;
-        const cameras = res.json();
+        const cameras = await res.json();
 
         for (const camera of cameras) {
           await loadPlayer({

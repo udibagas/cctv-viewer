@@ -19,7 +19,17 @@ app.get("/", async (req, res) => {
     res.render("index", { scriptUrl, cameras });
   } catch (error) {
     console.error(error);
-    res.status(5000).send(error.message);
+    res.status(500).send(error.message);
+  }
+});
+
+app.get("/api/kamera", async (req, res) => {
+  try {
+    const cameras = await Camera.findAll();
+    res.status(200).json(cameras);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
   }
 });
 

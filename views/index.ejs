@@ -30,13 +30,21 @@
 
     <script src="<%= scriptUrl %>"></script>
 
-    <% cameras.forEach(c => { %>
     <script>
-      loadPlayer({
-        url: `ws://localhost:2000/api/stream?url=<%= c.streaming_url %>`,
-        canvas: document.getElementById("canvas<%= c.id %>"),
-      });
+      (async () => {
+        const res = await fetch("/api/camera");
+        if (res.statusText !== "OK") return;
+        const cameras = res.json();
+
+        for (const camera of cameras) {
+          await loadPlayer({
+            url: `ws://localhost:2000/api/stream?url=${camera.streaming_url}`,
+            canvas: document.getElementById(`canvas${camera.id}`),
+            onDisconnect: () => console.log("Disconnected"),
+            audio: false,
+          });
+        }
+      })();
     </script>
-    <% }) %>
   </body>
 </html>

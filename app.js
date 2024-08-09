@@ -23,7 +23,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/api/kamera", async (req, res) => {
+app.get("/api/camera", async (req, res) => {
   try {
     const cameras = await Camera.findAll();
     res.status(200).json(cameras);
